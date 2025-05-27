@@ -1,0 +1,24 @@
+thantzinwin1843 thantzinwin1843
+
+
+{
+  $or: [
+    {
+      price: {
+        $ne: 0,
+        $lte: 500  
+      }
+    },
+    {
+      price: 0,
+      variants: {
+        $elemMatch: {
+          price: { $lte:500},     
+                      
+        }
+      }
+    }
+  ]
+}
+
+MERN_stack_ecommerce_backend
