@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
+import Product from "../models/Product.js";
+import Order from "../models/Order.js";
 export const register = async (req,res)=>{
     const {name, email, password} = req.body;
     try {
         let user = await User.findOne({email});
         if(user){
-           return res.status(400).json({"message":"This email is already register"})
+           return res.status(400).json({"message":"This email is already register","status":400})
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -145,6 +147,34 @@ export const getAllUsers = async(req, res) =>{
         const users = await User.find();
         console.log(users)
         res.status(200).json(users)
+    } catch (error) {
+        
+    }
+}
+
+export const getDashboardData = async(req, res) =>{
+    try {
+        const productCount = await Product.countDocuments();
+        const orderCount = await Order.countDocuments();
+        const userCount = await User.countDocuments();
+
+            const result = await Order.aggregate([
+            {
+                $match: {
+                status: { $nin: ['Pending', 'Cancelled'] } // exclude these statuses
+                }
+            },
+            {
+                $group: {
+                _id: null,
+                totalSales: { $sum: '$totalPrice' }
+                }
+            }
+            ]);
+
+            const total = result[0]?.totalSales || 0;
+
+        res.json({productCount,orderCount,userCount,total})
     } catch (error) {
         
     }

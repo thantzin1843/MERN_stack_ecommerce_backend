@@ -22,3 +22,5 @@ thantzinwin1843 thantzinwin1843
 }
 
 MERN_stack_ecommerce_frontend
+
+npm i chart.js react-chartjs-2
