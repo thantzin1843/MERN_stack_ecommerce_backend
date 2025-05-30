@@ -41,12 +41,12 @@ export const login = async(req,res)=>{
     const {email, password} = req.body;
     try {
         const user = await User.findOne({email});
-        if(!user) res.status(400).json({"message":"User Not Found"});
+        if(!user) res.status(400).json({"message":"User Not Found","status":400});
 
         const matchPassword = await bcrypt.compare(password, user.password);
         // console.log(matchPassword)
         if(!matchPassword){
-            res.status(400).json({"message":"Password Incorrect"});
+            res.status(400).json({"message":"Password Incorrect","status":400});
         }
 
         const payload = {user:{id:user._id, role:user.role}}
@@ -90,5 +90,62 @@ export const changeUserRole = async(req, res) =>{
         res.status(500).json({
             message:"Fail to change user role"
         })
+    }
+}
+
+export const updateUserName = async(req, res) =>{
+    try {
+        const {name,profile} = req.body;
+        const user = await User.findById(req.user?._id);
+        if(!user){
+            res.json({
+                "message":"User not found"
+            })
+        }
+
+        if(name){
+            user.name = name;
+        }
+        if(profile){
+            user.profile = profile;
+        }
+        const updatedUser = await user.save();
+        res.json(updatedUser)
+    } catch (error) {
+        
+    }
+}
+
+export const changePassword = async(req,res) =>{
+    try {
+        const {oldPassword, newPassword} = req.body;
+        const user = await User.findById(req.user._id);
+        const matchOldPassword = await bcrypt.compare(oldPassword, user?.password);
+        if(matchOldPassword){
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword,salt);
+            user.password = hashedPassword;
+            await user.save()
+            res.status(201).json({
+                "message":"Password successfully changed."
+            })
+        }
+            res.status(500).json({
+                "message":"Old password is wrong!"
+            })
+    } catch (error) {
+        res.status(500).json({
+                "message":"Password can't changed."
+            })
+    }
+}
+
+export const getAllUsers = async(req, res) =>{
+    try {
+        const users = await User.find();
+        console.log(users)
+        res.status(200).json(users)
+    } catch (error) {
+        
     }
 }

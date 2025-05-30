@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         enum: ["customer","admin"],
         default:'customer'
     },
+    profile:{
+        type:String, 
+        default:"/profileAvatar.jpg"
+    }
 },{timestamps:true})
 
 export const User = mongoose.models?.User || mongoose.model("User",userSchema)

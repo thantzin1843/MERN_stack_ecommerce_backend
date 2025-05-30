@@ -2,7 +2,7 @@ import express from 'express'
 import { connectToDB } from './config/db.js';
 import cors from 'cors';
 import dotenv from 'dotenv'
-import userRouter from './routes/UserRoute.js';
+import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
 import cartRouter from './routes/cartRoute.js';
 import checkoutRouter from './routes/checkoutRoute.js';
