@@ -21,14 +21,14 @@ const productSchema = new mongoose.Schema({
     ],
     price:{
         type:Number,
-        required:true,
+        // required:true,
     },
     discountPrice:{
         type:Number,
     },
     countInStock:{
         type:Number,
-        required:true,
+        // required:true,
         default:0
     },
     sku:{
