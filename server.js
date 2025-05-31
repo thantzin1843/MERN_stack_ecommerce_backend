@@ -14,10 +14,10 @@ import collectionRouter from './routes/collectionRoute.js';
 // db 
 const app = express();
 app.use(express.json());
-// app.use(cors());
-app.use(cors({
-  origin: 'https://mern-stack-ecommerce-frontend-git-master-thantzin1843s-projects.vercel.app'
-}))
+app.use(cors());
+// app.use(cors({
+//   origin: 'https://mern-stack-ecommerce-frontend-git-master-thantzin1843s-projects.vercel.app'
+// }))
 
 dotenv.config()
 const PORT = process.env.PORT || 3000;
